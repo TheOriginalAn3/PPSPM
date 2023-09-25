@@ -14,7 +14,7 @@ now you can use the 'pj' command in your terminal
 ### Usage:
 ```ps1
 To create a repo and folder type in 'pj create <name of your folder/project>'
-To remove/delete a repo and folder type in 'pj remove <name of your folder/project>'
+To remove/delete a repo and folder type in 'pj remove <name of your folder/project>' (also works to remove only repos if no folder is present localy)
 To resume(open) work on a project type in 'pj open <name of your folder/project>'
 To open a folder type in 'pj open <name of your folder/project>'
 To open the Projects folder saved as a Sys-Var type 'pj open'
