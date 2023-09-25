@@ -1,21 +1,27 @@
 ### Install: 
 ```bash
-git clone "https://github.com/KalleHallden/ProjectInitializationAutomation.git"
+cd [Path to where you want to save the .bat and python scripts]
+Then add that same path to your System- or User- Variables as a path under "Path"
+
+git clone "https://github.com/TheOriginalAn3/PPSPM"
+
 cd ProjectInitializationAutomation
-pip install -r requirements.txt
-touch .env
-Then open the .env file and store your username, password, and desired file destination. Use the provided format at the bottom of this README.
-source ~/.my_commands.sh
+pip install PyGithub
+
+now you can use the 'pj' command in your terminal
 ```
 
 ### Usage:
-```bash
-To run the script type in 'create <name of your folder>'
+```ps1
+To create a repo and folder type in 'pj create <name of your folder/project>'
+To remove/delete a repo and folder type in 'pj remove <name of your folder/project>'
+To resume(open) work on a project type in 'pj open <name of your folder/project>'
+To open a folder type in 'pj open <name of your folder/project>'
+To open the Projects folder saved as a Sys-Var type 'pj open'
 ```
 
-### Env File Format:
-```bash
-USERNAME="Username123"
-PASSWORD="Password123"
-FILEPATH="/path/to/your/project/"
+### Env Vars:
+```ps1
+ProjectsPath=[Path to Projects folder]
+gt = [Your GitHub Token]
 ```

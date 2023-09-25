@@ -1,21 +1,30 @@
 import sys
 import os
 from github import Github
-from dotenv import load_dotenv
 
-load_dotenv()
+foldername = str(sys.argv[1])                 # args variable from .bat
+path = os.environ.get('ProjectsPath')         # get projects dirctory to the env vars
+token = os.environ.get('gt')                  # get github token to the env vars
+_dir = path + '/' + foldername
 
-path = os.getenv("FILEPATH")
-username = os.getenv("USERNAME")
-password = os.getenv("PASSWORD")
+g = Github(token)
+user = g.get_user()
+login = user.login
+repo = user.create_repo(foldername)
 
-def create():
-    folderName = str(sys.argv[1])
-    os.makedirs(path + str(folderName))
-    user = Github(username, password).get_user()
-    repo = user.create_repo(folderName)
-    # f strings 
-    print(f"Succesfully created repository {folderName}")
+commands = [f'echo "# {repo.name}" >> README.md',
+            'git init',
+            f'git remote add origin https://github.com/{login}/{foldername}.git',
+            'git add .',
+            'git commit -m "Initial commit"',
+            'git push -u origin master']
 
-if __name__ == "__main__":
-    create()
+
+os.mkdir(_dir)
+os.chdir(_dir)
+
+for c in commands:
+    os.system(c)
+
+print(f'{foldername} created and GitHub repo initiallized!')
+os.system('code .') # open in VS Code

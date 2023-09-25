@@ -1,26 +1,44 @@
 import sys
-from selenium import webdriver
+import os
+import shutil
+from github import Github
 
-username = sys.argv[1]
-password = sys.argv[2]
-reponame = sys.argv[3]
+foldername = str(sys.argv[1])                 # args variable from .bat
+path = os.environ.get('ProjectsPath')         # get projects directory to the env vars
+token = os.environ.get('gt')                  # get GitHub token from the env vars
+_dir = path + '/' + foldername
 
-browser = webdriver.Chrome()
-browser.get('http://github.com/login')
+ghub = Github(token)
+user = ghub.get_user()
+login = user.login
 
+# Check if the repository already exists
+existing_repo = None
+try:
+    existing_repo = user.get_repo(foldername)
+except Exception as e:
+    pass
 
-def remove():
-    browser.find_elements_by_xpath("//input[@name='login']")[0].send_keys(username)
-    browser.find_elements_by_xpath("//input[@name='password']")[0].send_keys(password)
-    browser.find_elements_by_xpath("//input[@name='commit']")[0].click()
-    browser.get('https://github.com/' + username + '/' + reponame + '/settings')
-    browser.find_elements_by_xpath('//*[@id="options_bucket"]/div[9]/ul/li[4]/details/summary')[0].click()
-    browser.find_elements_by_xpath(
-        '//*[@id="options_bucket"]/div[9]/ul/li[4]/details/details-dialog/div[3]/form/p/input')[0].send_keys(username + "/" + reponame)
-    browser.find_elements_by_xpath(
-        '//*[@id="options_bucket"]/div[9]/ul/li[4]/details/details-dialog/div[3]/form/button')[0].click()
-    browser.get("https://github.com/" + username)
+# If the repository exists, delete it
+if existing_repo:
+    existing_repo.delete()
+    print(f'{foldername} repository on GitHub deleted.')
+else:
+    print(f"{foldername} is not a repository on GitHub")
 
-
-if __name__ == "__main__":
-    remove()
+try:
+    # Check if the local folder exists and delete it
+    if os.path.exists(_dir):
+        try:
+            # Use the os module's rmtree function to delete the directory and its contents
+            shutil.rmtree(_dir)
+            print(f"Directory '{_dir}' and its contents have been deleted.")
+        except FileNotFoundError:
+            print(f"Folder '{_dir}' does not exist.")
+    else:
+        print(f"The directory '{_dir}' does not exist.")
+except OSError as e:
+    print(f"Error: {e}")
+    print("Please remove Residual files manually. Use 'pj open' to open the Projects folder")
+except Exception as e:
+    print(f"An error occurred: {e}")
